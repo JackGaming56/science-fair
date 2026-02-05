@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Science Fair Project - Plant Growth Study</title>
+    <title>Science Fair Project - Waterwheel Project</title>
     <link rel="icon" type="image/png" href="waterwheel.png">
     <style>
         * {
@@ -625,96 +625,93 @@
     </div>
 
     <script>
-        // Check if device is mobile
-        function isMobile() {
-            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        // Get modal elements
+        // 1. Get modal elements
         const modal = document.getElementById('modal');
         const modalBody = document.getElementById('modal-body');
         const closeBtn = document.querySelector('.close');
-
-        // Function to open modal with content
+    
+        // 2. Define Modal Functions
         function openModal(content) {
+            if (!modal || !modalBody) return; // Safety check
             modalBody.innerHTML = content;
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
-        // Function to close modal
+    
         function closeModal() {
             modal.classList.remove('show');
             document.body.style.overflow = 'auto';
         }
-
-        // Only enable modals on mobile
-        if (isMobile()) {
-            // Close modal when clicking X
+    
+        // 3. Attach Global Event Listeners (Works on all devices)
+        
+        // Close modal when clicking the 'X'
+        if (closeBtn) {
             closeBtn.addEventListener('click', closeModal);
-
-            // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
+        }
+    
+        // Close modal when clicking the dark background
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    
+        // Close modal with Escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+    
+        // Make sections clickable
+        document.querySelectorAll('.section').forEach(section => {
+            section.addEventListener('click', function(e) {
+                // Don't open if clicking on a teammate card inside the section
+                if (e.target.closest('.teammate-card')) return;
+    
+                const h2 = this.querySelector('h2');
+                if (!h2 || h2.textContent === 'Our Team') return;
+    
+                const title = h2.textContent;
+                let contentWithoutTitle = this.innerHTML.replace(/<h2>.*?<\/h2>/i, '');
+                // Clean up teammate-card classes for modal display
+                contentWithoutTitle = contentWithoutTitle.replace(/class="teammate-card[^"]*"/gi, '');
+                
+                openModal(`<h2>${title}</h2>${contentWithoutTitle}`);
             });
-
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape' && modal.classList.contains('show')) {
-                    closeModal();
-                }
+        });
+    
+        // Make teammate cards clickable
+        document.querySelectorAll('.teammate-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.stopPropagation(); // Stop the section click from firing
+                
+                const img = this.querySelector('img');
+                const name = this.querySelector('h3').textContent;
+                const role = this.querySelector('.role').textContent;
+                const bio = this.querySelector('.bio').textContent;
+                const imgSrc = img ? img.src : '';
+                const imgAlt = img ? img.alt : '';
+                
+                const imgTag = imgSrc ? `<img src="${imgSrc}" alt="${imgAlt}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 20px auto; border: 4px solid #8b1a1a;">` : '';
+                
+                openModal(`
+                    ${imgTag}
+                    <h2>${name}</h2>
+                    <h3 style="color: #c0392b;">${role}</h3>
+                    <p>${bio}</p>
+                `);
             });
-            // Make sections clickable
-            document.querySelectorAll('.section').forEach(section => {
-                section.addEventListener('click', function(e) {
-                    // Don't open modal if clicking on a teammate card
-                    if (e.target.closest('.teammate-card')) {
-                        return;
-                    }
-                    const title = this.querySelector('h2').textContent;
-                    // Don't open modal for "Our Team" section
-                    if (title === 'Our Team') {
-                        return;
-                    }
-                    const content = this.innerHTML;
-                    // Remove the h2 from content since we're adding it separately
-                    let contentWithoutTitle = content.replace(/<h2>.*?<\/h2>/i, '');
-                    // Remove teammate cards styling classes to fix white text issue
-                    contentWithoutTitle = contentWithoutTitle.replace(/class="teammate-card[^"]*"/gi, '');
-                    openModal(`<h2>${title}</h2>${contentWithoutTitle}`);
-                });
-            });
-
-            // Make teammate cards clickable
-            document.querySelectorAll('.teammate-card').forEach(card => {
-                card.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Prevent section click
-                    const img = this.querySelector('img');
-                    const imgSrc = img ? img.src : '';
-                    const imgAlt = img ? img.alt : '';
-                    const name = this.querySelector('h3').textContent;
-                    const role = this.querySelector('.role').textContent;
-                    const bio = this.querySelector('.bio').textContent;
-                    const imgTag = imgSrc ? `<img src="${imgSrc}" alt="${imgAlt}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 20px auto; border: 4px solid rgba(139, 26, 26, 0.3);">` : '';
-                    openModal(`
-                        ${imgTag}
-                        <h2>${name}</h2>
-                        <h3>${role}</h3>
-                        <p>${bio}</p>
-                    `);
-                });
-            });
-
-            // Make header clickable
-            document.querySelector('header').addEventListener('click', function() {
+        });
+    
+        // Make header clickable
+        const header = document.querySelector('header');
+        if (header) {
+            header.addEventListener('click', function() {
                 const title = this.querySelector('h1').textContent;
                 const subtitle = this.querySelector('p').textContent;
-                openModal(`
-                    <h2>${title}</h2>
-                    <p>${subtitle}</p>
-                `);
+                openModal(`<h2>${title}</h2><p>${subtitle}</p>`);
             });
         }
     </script>
