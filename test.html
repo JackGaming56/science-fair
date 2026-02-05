@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>Science Fair Project - Plant Growth Study</title>
+    <link rel="icon" type="image/png" href="waterwheel.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #c0392b 0%, #8b1a1a 100%);
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        header h1 {
+            color: #8b1a1a;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header-image {
+            height: 7em;
+            width: auto;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        header p img {
+            height: 1.2em;
+            width: auto;
+            vertical-align: middle;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #8b1a1a;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #c0392b;
+        }
+
+        .section h3 {
+            color: #8b1a1a;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: justify;
+        }
+
+        .section ul,
+        .section ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+
+        .section ol {
+            padding-left: 25px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .teammates {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .teammate-card {
+            background: linear-gradient(135deg, #c0392b 0%, #8b1a1a 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .teammate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .teammate-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            display: block;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .teammate-card h3 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .teammate-card .role {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .teammate-card .bio {
+            font-size: 0.95em;
+            opacity: 0.85;
+            margin-top: 10px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #d4735a 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .video-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.98);
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        .close {
+            color: #c0392b;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+            line-height: 1;
+        }
+
+        .close:hover,
+        .close:focus {
+            transform: rotate(90deg);
+            color: #8b1a1a;
+        }
+
+        .modal-content h2 {
+            color: #8b1a1a;
+            margin-bottom: 20px;
+            padding-right: 40px;
+        }
+
+        .modal-content h3 {
+            color: #c0392b;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p,
+        .modal-content ul,
+        .modal-content ol {
+            margin-bottom: 15px;
+        }
+
+        /* Override white text from teammate cards in modal */
+        .modal-content .teammate-card,
+        .modal-content .teammate-card * {
+            color: #333 !important;
+        }
+
+        .modal-content .teammate-card h3 {
+            color: #8b1a1a !important;
+        }
+
+        .modal-content .teammate-card .role {
+            color: #c0392b !important;
+        }
+
+        .modal-content .teammate-card .bio {
+            color: #666 !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                padding: 25px 20px;
+                max-height: 85vh;
+            }
+
+            .close {
+                font-size: 28px;
+                top: 10px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 20px 15px;
+                transition: transform 0.2s ease;
+            }
+
+            header:active {
+                transform: scale(0.98);
+            }
+
+            .header-image {
+                height: 2.5em;
+                width: auto;
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                transition: transform 0.3s ease;
+            }
+
+            .header-image:active {
+                transform: scale(0.9) rotate(5deg);
+            }
+
+            header h1 {
+                font-size: 1.8em;
+                margin-bottom: 8px;
+                margin-top: 0;
+                transition: transform 0.2s ease;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            .video-container {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+
+            .section {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+                cursor: pointer;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .section:active {
+                transform: scale(0.98);
+                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+            }
+
+            .section h2 {
+                font-size: 1.6em;
+                margin-bottom: 15px;
+                transition: color 0.2s ease;
+            }
+
+            .section:active h2 {
+                color: #8b1a1a;
+            }
+
+            .section h3 {
+                font-size: 1.3em;
+                margin-top: 20px;
+                margin-bottom: 12px;
+                transition: transform 0.2s ease;
+            }
+
+            .section:active h3 {
+                transform: translateX(5px);
+            }
+
+            .section p {
+                font-size: 1em;
+                text-align: left;
+            }
+
+            .section ul,
+            .section ol {
+                margin-left: 20px;
+                padding-left: 8px;
+            }
+
+            .section ol {
+                padding-left: 20px;
+            }
+
+            .section li {
+                font-size: 0.95em;
+                transition: transform 0.2s ease, padding-left 0.2s ease;
+            }
+
+            .section li:active {
+                transform: translateX(5px);
+                padding-left: 5px;
+            }
+
+            .teammates {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .teammate-card {
+                padding: 20px;
+                cursor: pointer;
+            }
+
+            .teammate-card img {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 12px;
+            }
+
+            .teammate-card:active {
+                transform: scale(0.95) translateY(0);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+            }
+
+            .teammate-card h3 {
+                font-size: 1.3em;
+                transition: transform 0.2s ease;
+            }
+
+            .teammate-card:active h3 {
+                transform: scale(1.05);
+            }
+
+            .teammate-card .role {
+                font-size: 1em;
+            }
+
+            .teammate-card .bio {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+
+            header {
+                padding: 15px 10px;
+            }
+
+            .header-image {
+                height: 2em;
+                width: auto;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            header p {
+                font-size: 0.9em;
+            }
+
+            .video-container {
+                padding: 15px 10px;
+                margin-bottom: 20px;
+            }
+
+            .section {
+                padding: 15px 10px;
+            }
+
+            .section h2 {
+                font-size: 1.4em;
+            }
+
+            .section h3 {
+                font-size: 1.2em;
+            }
+
+            .teammate-card img {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="waterwheel.png" alt="Waterwheel" class="header-image">
+            <h1>Science Fair Project</h1>
+            <p>(Project subtitle / tagline)</p>
+        </header>
+
+        <div class="video-container">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/Q0pJYda463k" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <section class="section">
+            <h2>Project Overview</h2>
+            <p>(Add your overview here.)</p>
+        </section>
+
+        <section class="section">
+            <h2>Research Question</h2>
+            <p><span class="highlight">(Add your research question here.)</span></p>
+        </section>
+
+        <section class="section">
+            <h2>Hypothesis</h2>
+            <p>(Add your hypothesis here.)</p>
+        </section>
+
+        <section class="section">
+            <h2>Methodology</h2>
+            <h3>Materials</h3>
+            <ul>
+                <li>(Add material #1)</li>
+                <li>(Add material #2)</li>
+                <li>(Add material #3)</li>
+            </ul>
+
+            <h3>Procedure</h3>
+            <ol>
+                <li>(Add step #1)</li>
+                <li>(Add step #2)</li>
+                <li>(Add step #3)</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>Results</h2>
+            <p>(Add your results summary here.)</p>
+            <ul>
+                <li>(Add result bullet #1)</li>
+                <li>(Add result bullet #2)</li>
+                <li>(Add result bullet #3)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Conclusion</h2>
+            <p>(Add your conclusion here.)</p>
+        </section>
+
+        <section class="section">
+            <h2>Our Team</h2>
+            <div class="teammates">
+                <div class="teammate-card">
+                    <img src="" alt="Mohamed Abdullah" class="teammate-photo">
+                    <h3>Mohamed Abdullah</h3>
+                    <div class="role">(Role)</div>
+                    <div class="bio">(Short bio / what they did)</div>
+                </div>
+                <div class="teammate-card">
+                    <img src="" alt="Mohamed Abdelazim" class="teammate-photo">
+                    <h3>Mohamed Abdelazim</h3>
+                    <div class="role">(Role)</div>
+                    <div class="bio">(Short bio / what they did)</div>
+                </div>
+                <div class="teammate-card">
+                    <img src="" alt="Omar Ibrahim" class="teammate-photo">
+                    <h3>Omar Ibrahim</h3>
+                    <div class="role">(Role)</div>
+                    <div class="bio">(Short bio / what they did)</div>
+                </div>
+                <div class="teammate-card">
+                    <img src="" alt="Nabila Mohamed" class="teammate-photo">
+                    <h3>Nabila Mohamed</h3>
+                    <div class="role">(Role)</div>
+                    <div class="bio">(Short bio / what they did)</div>
+                </div>
+                <div class="teammate-card">
+                    <img src="" alt="Hamza Mohamed" class="teammate-photo">
+                    <h3>Hamza Mohamed</h3>
+                    <div class="role">(Role)</div>
+                    <div class="bio">(Short bio / what they did)</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Check if device is mobile
+        function isMobile() {
+            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Get modal elements
+        const modal = document.getElementById('modal');
+        const modalBody = document.getElementById('modal-body');
+        const closeBtn = document.querySelector('.close');
+
+        // Function to open modal with content
+        function openModal(content) {
+            modalBody.innerHTML = content;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Only enable modals on mobile
+        if (isMobile()) {
+            // Close modal when clicking X
+            closeBtn.addEventListener('click', closeModal);
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.classList.contains('show')) {
+                    closeModal();
+                }
+            });
+            // Make sections clickable
+            document.querySelectorAll('.section').forEach(section => {
+                section.addEventListener('click', function(e) {
+                    // Don't open modal if clicking on a teammate card
+                    if (e.target.closest('.teammate-card')) {
+                        return;
+                    }
+                    const title = this.querySelector('h2').textContent;
+                    // Don't open modal for "Our Team" section
+                    if (title === 'Our Team') {
+                        return;
+                    }
+                    const content = this.innerHTML;
+                    // Remove the h2 from content since we're adding it separately
+                    let contentWithoutTitle = content.replace(/<h2>.*?<\/h2>/i, '');
+                    // Remove teammate cards styling classes to fix white text issue
+                    contentWithoutTitle = contentWithoutTitle.replace(/class="teammate-card[^"]*"/gi, '');
+                    openModal(`<h2>${title}</h2>${contentWithoutTitle}`);
+                });
+            });
+
+            // Make teammate cards clickable
+            document.querySelectorAll('.teammate-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent section click
+                    const img = this.querySelector('img');
+                    const imgSrc = img ? img.src : '';
+                    const imgAlt = img ? img.alt : '';
+                    const name = this.querySelector('h3').textContent;
+                    const role = this.querySelector('.role').textContent;
+                    const bio = this.querySelector('.bio').textContent;
+                    const imgTag = imgSrc ? `<img src="${imgSrc}" alt="${imgAlt}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 20px auto; border: 4px solid rgba(139, 26, 26, 0.3);">` : '';
+                    openModal(`
+                        ${imgTag}
+                        <h2>${name}</h2>
+                        <h3>${role}</h3>
+                        <p>${bio}</p>
+                    `);
+                });
+            });
+
+            // Make header clickable
+            document.querySelector('header').addEventListener('click', function() {
+                const title = this.querySelector('h1').textContent;
+                const subtitle = this.querySelector('p').textContent;
+                openModal(`
+                    <h2>${title}</h2>
+                    <p>${subtitle}</p>
+                `);
+            });
+        }
+    </script>
+</body>
+</html>
