@@ -9,17 +9,26 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        
+        /* MOVING BACKGROUND */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #c0392b 0%, #8b1a1a 100%);
+            background: linear-gradient(-45deg, #c0392b, #8b1a1a, #a93226, #7b241c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-        /* HEADER FIX FOR MOBILE */
         header {
             background: rgba(255, 255, 255, 0.95);
             padding: 40px 20px;
@@ -33,43 +42,17 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
+            transition: transform 0.1s ease;
+            cursor: pointer;
         }
 
-        header h1 {
-            color: #8b1a1a;
-            font-size: 2.5em;
-            max-width: 80%; /* Leaves room for icon on desktop */
-        }
+        header:active { transform: scale(0.98); }
+        header h1 { color: #8b1a1a; font-size: 2.5em; max-width: 80%; }
+        .header-image { height: 7em; width: auto; position: absolute; top: 20px; right: 20px; }
 
-        .header-image { 
-            height: 7em; 
-            width: auto; 
-            /* On desktop, keep it to the side */
-            position: absolute; 
-            top: 20px; 
-            right: 20px; 
-        }
-
-        header p {
-            color: #666;
-            font-size: 1.1em;
-            margin-top: 10px;
-        }
-
-        /* Responsive Header Fix */
         @media (max-width: 768px) {
-            header {
-                padding: 30px 15px;
-            }
-            .header-image {
-                position: static; /* Removes overlap */
-                height: 5em;
-                margin-bottom: 10px;
-            }
-            header h1 {
-                font-size: 1.8em;
-                max-width: 100%;
-            }
+            .header-image { position: static; height: 5em; }
+            header h1 { font-size: 1.8em; max-width: 100%; }
         }
 
         .section {
@@ -78,7 +61,10 @@
             margin-bottom: 25px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.1s ease;
+            cursor: pointer;
         }
+        .section:active { transform: scale(0.99); }
 
         .section h2 {
             color: #8b1a1a;
@@ -86,6 +72,19 @@
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 3px solid #c0392b;
+        }
+
+        /* GRADIENT PILL STYLE */
+        .glow {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 10px 25px;
+            border-radius: 12px;
+            background: linear-gradient(to right, #84fab0 0%, #d4735a 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 10px 0;
         }
 
         /* TEAM LAYOUT */
@@ -99,8 +98,10 @@
             text-align: center;
             color: white;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
             cursor: pointer;
         }
+        .teammate-card:active { transform: scale(0.95); }
 
         .gold-leader {
             background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%) !important;
@@ -116,7 +117,7 @@
             padding: 2px 12px;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 0.9em;
+            font-size: 0.8em;
             margin-bottom: 15px;
             text-transform: uppercase;
         }
@@ -127,17 +128,28 @@
             border: 4px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Standard Content styles */
-        .highlight { background: linear-gradient(120deg, #84fab0 0%, #d4735a 100%); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        /* MODAL */
+        .modal { 
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+        }
+        .modal.show { display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { 
+            background: white; padding: 30px; border-radius: 15px; width: 95%; max-width: 600px; 
+            position: relative; max-height: 80vh; overflow-y: auto; color: #333;
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close { color: #c0392b; float: right; font-size: 32px; font-weight: bold; cursor: pointer; position: absolute; top: 15px; right: 20px; }
+
         .video-container { background: rgba(255, 255, 255, 0.95); padding: 30px; margin-bottom: 25px; border-radius: 15px; text-align: center; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
-        .modal.show { display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 600px; position: relative; max-height: 80vh; overflow-y: auto; color: #333; }
-        .close { color: #c0392b; float: right; font-size: 32px; font-weight: bold; cursor: pointer; position: absolute; top: 15px; right: 20px; }
     </style>
 </head>
 <body>
@@ -161,7 +173,7 @@
 
         <section class="section">
             <h2>Research Question</h2>
-            <p><span class="highlight">How does water flow affect energy output?</span></p>
+            <p class="glow">How does water flow affect energy output?</p>
         </section>
 
         <section class="section">
@@ -172,20 +184,27 @@
         <section class="section">
             <h2>Methodology</h2>
             <h3>Materials</h3>
-            <ul>
+            <ul style="margin-left: 20px; margin-top: 10px;">
                 <li>(Add material #1)</li>
                 <li>(Add material #2)</li>
+                <li>(Add material #3)</li>
             </ul>
-            <h3>Procedure</h3>
-            <ol>
+            <h3 style="margin-top:20px;">Procedure</h3>
+            <ol style="margin-left: 20px; margin-top: 10px;">
                 <li>(Add step #1)</li>
                 <li>(Add step #2)</li>
+                <li>(Add step #3)</li>
             </ol>
         </section>
 
         <section class="section">
             <h2>Results</h2>
             <p>(Add your results summary here.)</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>(Add result bullet #1)</li>
+                <li>(Add result bullet #2)</li>
+                <li>(Add result bullet #3)</li>
+            </ul>
         </section>
 
         <section class="section">
@@ -257,8 +276,8 @@
             document.body.style.overflow = 'auto';
         }
     
-        if (closeBtn) closeBtn.addEventListener('click', closeModal);
-        window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        closeBtn.onclick = closeModal;
+        window.onclick = (e) => { if (e.target === modal) closeModal(); };
 
         document.querySelectorAll('.teammate-card').forEach(card => {
             card.addEventListener('click', function(e) {
@@ -266,7 +285,16 @@
                 const name = this.querySelector('h3').textContent;
                 const role = this.querySelector('.role').textContent;
                 const bio = this.querySelector('.bio').textContent;
-                openModal(`<h2>${name}</h2><h3 style="color:#c0392b">${role}</h3><p>${bio}</p>`);
+                const isLeader = this.classList.contains('gold-leader');
+                const tagHtml = isLeader ? '<div class="leader-tag" style="margin:10px 0;">Leader</div>' : '';
+
+                openModal(`
+                    <h2>${name}</h2>
+                    ${tagHtml}
+                    <h3 style="color:#c0392b; margin-top:10px;">${role}</h3>
+                    <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
+                    <p>${bio}</p>
+                `);
             });
         });
 
@@ -275,11 +303,13 @@
                 if (e.target.closest('.teammate-card')) return;
                 const h2 = this.querySelector('h2');
                 if (!h2 || h2.textContent === 'Our Team') return;
-                const title = h2.textContent;
-                const content = this.innerHTML.replace(/<h2>.*?<\/h2>/i, '');
-                openModal(`<h2>${title}</h2>${content}`);
+                openModal(`<h2>${h2.textContent}</h2>${this.innerHTML.replace(/<h2>.*?<\/h2>/i, '')}`);
             });
         });
+
+        document.querySelector('header').onclick = function() {
+            openModal(`<h2>Project Info</h2><p>${this.querySelector('p').textContent}</p>`);
+        };
     </script>
 </body>
 </html>
