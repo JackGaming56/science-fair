@@ -27,6 +27,56 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* SIDE NAVIGATION BUTTONS */
+        .side-nav {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 2000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #8b1a1a;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            background: #fff;
+            transform: translateX(8px);
+            border-color: #ffd700;
+            color: #c0392b;
+        }
+
+        @media (max-width: 1100px) {
+            .side-nav {
+                top: auto;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                transform: none;
+                flex-direction: row;
+                overflow-x: auto;
+                background: rgba(139, 26, 26, 0.95);
+                padding: 10px;
+                gap: 8px;
+                justify-content: center;
+            }
+            .nav-btn { padding: 8px 12px; font-size: 0.8em; transform: none !important; }
+            .container { padding-bottom: 80px; }
+        }
+
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
         header {
@@ -63,6 +113,7 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.1s ease;
             cursor: pointer;
+            scroll-margin-top: 30px;
         }
         .section:active { transform: scale(0.99); }
 
@@ -98,8 +149,14 @@
             text-align: center;
             color: white;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.1s ease;
+            transition: all 0.3s ease;
             cursor: pointer;
+        }
+        
+        /* Team Hover Effect */
+        .teammate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
         .teammate-card:active { transform: scale(0.95); }
 
@@ -130,7 +187,7 @@
 
         /* MODAL */
         .modal { 
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; 
+            display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
         }
         .modal.show { display: flex; align-items: center; justify-content: center; padding: 20px; }
@@ -153,10 +210,20 @@
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <nav class="side-nav">
+        <a href="#top" class="nav-btn">Top</a>
+        <a href="#overview" class="nav-btn">Overview</a>
+        <a href="#methodology" class="nav-btn">Methodology</a>
+        <a href="#results" class="nav-btn">Results</a>
+        <a href="#conclusion" class="nav-btn">Conclusion</a>
+        <a href="#team" class="nav-btn">Team</a>
+    </nav>
+
+    <div class="container" id="top">
         <header>
             <img src="waterwheel.png" alt="Waterwheel" class="header-image">
-            <h1>Science Free Energy Waterwheel Project</h1>
+            <h1>Science Fair Free Energy Waterwheel Project</h1>
             <p>©Copyright 2026 Mohamed Abdullah. Website, Video, and Qrcode are apart of this copyright.</p>
         </header>
 
@@ -166,7 +233,7 @@
             </div>
         </div>
 
-        <section class="section">
+        <section class="section" id="overview">
             <h2>Project Overview</h2>
             <p>(Add your overview here.)</p>
         </section>
@@ -181,7 +248,7 @@
             <p>(Add your hypothesis here.)</p>
         </section>
 
-        <section class="section">
+        <section class="section" id="methodology">
             <h2>Methodology</h2>
             <h3>Materials</h3>
             <ul style="margin-left: 20px; margin-top: 10px;">
@@ -197,7 +264,7 @@
             </ol>
         </section>
 
-        <section class="section">
+        <section class="section" id="results">
             <h2>Results</h2>
             <p>(Add your results summary here.)</p>
             <ul style="margin-left: 20px; margin-top: 10px;">
@@ -207,12 +274,12 @@
             </ul>
         </section>
 
-        <section class="section">
+        <section class="section" id="conclusion">
             <h2>Conclusion</h2>
             <p>(Add your conclusion here.)</p>
         </section>
 
-        <section class="section">
+        <section class="section" id="team">
             <h2>Our Team</h2>
             <div class="leader-container">
                 <div class="teammate-card gold-leader">
@@ -308,7 +375,7 @@
         });
 
         document.querySelector('header').onclick = function() {
-            openModal(`<h2>Project Info</h2><p>${this.querySelector('p').textContent}</p>`);
+            openModal(`<h2>Science Fair Free Energy Waterwheel Project</h2><p>${this.querySelector('p').textContent}</p>`);
         };
     </script>
 </body>
